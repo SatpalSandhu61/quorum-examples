@@ -42,12 +42,12 @@ while (( "$#" )); do
     esac
 done
 
-NETWORK_ID=$(cat istanbul-genesis.json | tr -d '\r' | grep chainId | awk -F " " '{print $2}' | awk -F "," '{print $1}')
+NETWORK_ID=$(cat genesis.json | grep chainId | awk -F " " '{print $2}' | awk -F "," '{print $1}')
 
 if [ $NETWORK_ID -eq 1 ]
 then
     echo "  Quorum should not be run with a chainId of 1 (Ethereum mainnet)"
-    echo "  please set the chainId in the istanbul-genesis.json to another value "
+    echo "  please set the chainId in the genensis.json to another value "
     echo "  1337 is the recommend ChainId for Geth private clients."
 fi
 
@@ -55,26 +55,25 @@ mkdir -p qdata/logs
 
 if [ "$privacyImpl" == "tessera" ]; then
   echo "[*] Starting Tessera nodes"
-  ./tessera-start.sh ${tesseraOptions}
+  #./tessera-start.sh ${tesseraOptions}
 elif [ "$privacyImpl" == "constellation" ]; then
   echo "[*] Starting Constellation nodes"
-  ./constellation-start.sh
+  #./constellation-start.sh
 else
   echo "Unsupported privacy implementation: ${privacyImpl}"
   usage
 fi
 
 echo "[*] Starting Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
-QUORUM_GETH_ARGS=${QUORUM_GETH_ARGS:-}
 set -v
-ARGS="--nodiscover --istanbul.blockperiod 1 --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul $QUORUM_GETH_ARGS"
+ARGS="--nodiscover --istanbul.blockperiod 1 --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul"
 PRIVATE_CONFIG=qdata/c1/tm.ipc nohup geth --datadir qdata/dd1 $ARGS --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &
 PRIVATE_CONFIG=qdata/c2/tm.ipc nohup geth --datadir qdata/dd2 $ARGS --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt 2>>qdata/logs/2.log &
 PRIVATE_CONFIG=qdata/c3/tm.ipc nohup geth --datadir qdata/dd3 $ARGS --rpcport 22002 --port 21002 --unlock 0 --password passwords.txt 2>>qdata/logs/3.log &
 PRIVATE_CONFIG=qdata/c4/tm.ipc nohup geth --datadir qdata/dd4 $ARGS --rpcport 22003 --port 21003 --unlock 0 --password passwords.txt 2>>qdata/logs/4.log &
 PRIVATE_CONFIG=qdata/c5/tm.ipc nohup geth --datadir qdata/dd5 $ARGS --rpcport 22004 --port 21004 --unlock 0 --password passwords.txt 2>>qdata/logs/5.log &
 PRIVATE_CONFIG=qdata/c6/tm.ipc nohup geth --datadir qdata/dd6 $ARGS --rpcport 22005 --port 21005 --unlock 0 --password passwords.txt 2>>qdata/logs/6.log &
-PRIVATE_CONFIG=qdata/c7/tm.ipc nohup geth --datadir qdata/dd7 $ARGS --rpcport 22006 --port 21006 --unlock 0 --password passwords.txt 2>>qdata/logs/7.log &
+#PRIVATE_CONFIG=qdata/c7/tm.ipc nohup geth --datadir qdata/dd7 $ARGS --rpcport 22006 --port 21006 --unlock 0 --password passwords.txt 2>>qdata/logs/7.log &
 set +v
 
 echo

@@ -1,0 +1,42 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "linux", primary: true do |linux|
+    linux.vm.box = "ubuntu/xenial64"
+    linux.vm.provision :shell, path: "vagrant/bootstrap.sh"
+    linux.vm.network "forwarded_port", guest: 22000, host: 22000
+    linux.vm.network "forwarded_port", guest: 22001, host: 22001
+    linux.vm.network "forwarded_port", guest: 22002, host: 22002
+    linux.vm.network "forwarded_port", guest: 22003, host: 22003
+    linux.vm.network "forwarded_port", guest: 22004, host: 22004
+    linux.vm.network "forwarded_port", guest: 22005, host: 22005
+    linux.vm.network "forwarded_port", guest: 22006, host: 22006
+    linux.vm.provider "virtualbox" do |v|
+      v.memory = 6144
+      v.name = "quorum-linux"
+    end
+  end
+
+  config.vm.define "windows", autostart: false do |windows|
+    windows.vm.box = "Microsoft/EdgeOnWindows10"
+    windows.vm.provision :shell, path: "vagrant/bootstrap-windows.bat"
+    windows.vm.guest = :windows
+    windows.vm.communicator = "winrm"
+    windows.vm.boot_timeout = 600
+    windows.vm.graceful_halt_timeout = 600
+
+    windows.vm.network :forwarded_port, guest: 3389, host: 3389
+    windows.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+
+    #windows.vm.network "forwarded_port", guest: 22000, host: 22000
+    #windows.vm.network "forwarded_port", guest: 22001, host: 22001
+    #windows.vm.network "forwarded_port", guest: 22002, host: 22002
+    #windows.vm.network "forwarded_port", guest: 22003, host: 22003
+    #windows.vm.network "forwarded_port", guest: 22004, host: 22004
+    #windows.vm.network "forwarded_port", guest: 22005, host: 22005
+    #windows.vm.network "forwarded_port", guest: 22006, host: 22006
+
+    windows.vm.provider "virtualbox" do |v|
+      v.memory = 6144
+      v.name = "quorum-windows"
+    end
+  end
+end
