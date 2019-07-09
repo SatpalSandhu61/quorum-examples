@@ -6,6 +6,7 @@ while [ 1 ]; do
   for i in {1..100}
   do
     ./runscript.sh "public-contract.js"
+    #sleep 2
   done
   echo "PAUSE"
   sleep 5

@@ -53,7 +53,7 @@ fi
 
 mkdir -p qdata/logs
 
-echo "RUnning without a transaction manager"
+echo "Running without a transaction manager"
 
 echo "[*] Starting Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
 set -v

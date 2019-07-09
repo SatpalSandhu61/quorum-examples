@@ -27,6 +27,7 @@
     "eip158Block": null,
     "isQuorum":true,
     "raft": {
+      "isRaft": true
     }
   },
   "difficulty": "0x0",
