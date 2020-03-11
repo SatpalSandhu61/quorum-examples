@@ -11,6 +11,10 @@ function usage() {
   echo "    tessera | tessera-remote | constellation (default = tessera): specifies which privacy implementation to use"
   echo "    --tesseraOptions: allows additional options as documented in tessera-start.sh usage which is shown below:"
   echo ""
+  echo "Note that this script will examine the file qdata/numberOfNodes to"
+  echo "determine how many nodes to start up. If the file doesn't exist"
+  echo "then 7 nodes will be assumed"
+  echo ""
   ./tessera-start.sh --help
   exit -1
 }
@@ -40,22 +44,21 @@ while (( "$#" )); do
             usage
             ;;
         *)
-            echo "Error: Unsupported command line paramter $1"
+            echo "Error: Unsupported command line parameter $1"
             usage
             ;;
     esac
 done
 
-NETWORK_ID=$(cat istanbul-genesis.json | tr -d '\r' | grep chainId | awk -F " " '{print $2}' | awk -F "," '{print $1}')
-
-if [ $NETWORK_ID -eq 1 ]
-then
-    echo "  Quorum should not be run with a chainId of 1 (Ethereum mainnet)"
-    echo "  please set the chainId in the istanbul-genesis.json to another value "
-    echo "  1337 is the recommend ChainId for Geth private clients."
-fi
+# Perform any necessary validation
+performValidation istanbul-genesis.json
 
 mkdir -p qdata/logs
+
+numNodes=7
+if [[ -f qdata/numberOfNodes ]]; then
+    numNodes=`cat qdata/numberOfNodes`
+fi
 
 if [ "$privacyImpl" == "tessera" ]; then
   echo "[*] Starting Tessera nodes"
@@ -71,7 +74,7 @@ else
   usage
 fi
 
-echo "[*] Starting Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
+echo "[*] Starting ${numNodes} Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
 QUORUM_GETH_ARGS=${QUORUM_GETH_ARGS:-}
 set -v
 ARGS="--nodiscover --istanbul.blockperiod 5 --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain \"*\" --rpcvhosts \"*\" --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul $QUORUM_GETH_ARGS"

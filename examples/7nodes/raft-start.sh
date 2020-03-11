@@ -11,8 +11,40 @@ function usage() {
   echo "    tessera | tessera-remote | constellation (default = tessera): specifies which privacy implementation to use"
   echo "    --tesseraOptions: allows additional options as documented in tessera-start.sh usage which is shown below:"
   echo ""
+  echo "Note that this script will examine the file qdata/numberOfNodes to"
+  echo "determine how many nodes to start up. If the file doesn't exist"
+  echo "then 7 nodes will be assumed"
+  echo ""
   ./tessera-start.sh --help
   exit -1
+}
+
+function performValidation() {
+    # Warn the user if chainId is same as Ethereum main net (see https://github.com/jpmorganchase/quorum/issues/487)
+    genesisFile=$1
+    NETWORK_ID=$(cat $genesisFile | tr -d '\r' | grep chainId | awk -F " " '{print $2}' | awk -F "," '{print $1}')
+
+    if [ $NETWORK_ID -eq 1 ]
+    then
+        echo "  Quorum should not be run with a chainId of 1 (Ethereum mainnet)"
+        echo "  please set the chainId in the $genesisFile to another value "
+        echo "  1337 is the recommend ChainId for Geth private clients."
+    fi
+
+    # Check that the correct geth executable is on the path
+    set +e
+    if [ "`which geth`" == "" ]; then
+        echo "ERROR: geth executable not found. Ensure that Quorum geth is on the path."
+        exit -1
+    else
+        GETH_VERSION=`geth version |grep -i "Quorum Version"`
+        if [ "$GETH_VERSION" == "" ]; then
+            echo "ERROR: you appear to be running with upstream geth. Ensure that Quorum geth is on the PATH (before any other geth version)."
+            exit -1
+        fi
+        echo "  Found geth: \"$GETH_VERSION\""
+    fi
+    set -e
 }
 
 privacyImpl=tessera
@@ -46,16 +78,15 @@ while (( "$#" )); do
     esac
 done
 
-NETWORK_ID=$(cat genesis.json | tr -d '\r' | grep chainId | awk -F " " '{print $2}' | awk -F "," '{print $1}')
-
-if [ $NETWORK_ID -eq 1 ]
-then
-	echo "  Quorum should not be run with a chainId of 1 (Ethereum mainnet)"
-    echo "  please set the chainId in the genensis.json to another value "
-	echo "  1337 is the recommend ChainId for Geth private clients."
-fi
+# Perform any necessary validation
+performValidation genesis.json
 
 mkdir -p qdata/logs
+
+numNodes=7
+if [[ -f qdata/numberOfNodes ]]; then
+    numNodes=`cat qdata/numberOfNodes`
+fi
 
 if [ "$privacyImpl" == "tessera" ]; then
   echo "[*] Starting Tessera nodes"
@@ -71,7 +102,7 @@ else
   usage
 fi
 
-echo "[*] Starting Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
+echo "[*] Starting $numNodes Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
 QUORUM_GETH_ARGS=${QUORUM_GETH_ARGS:-}
 set -v
 ARGS="--nodiscover --verbosity 5 --networkid $NETWORK_ID --raft --rpc --rpccorsdomain \"*\" --rpcvhosts \"*\" --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft --emitcheckpoints $QUORUM_GETH_ARGS"
