@@ -105,14 +105,28 @@ fi
 echo "[*] Starting $numNodes Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
 QUORUM_GETH_ARGS=${QUORUM_GETH_ARGS:-}
 set -v
-ARGS="--nodiscover --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain \"*\" --rpcvhosts \"*\" --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum $QUORUM_GETH_ARGS"
-echo "--datadir qdata/dd1 $ARGS --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c1/tm.ipc xargs nohup geth 2>>qdata/logs/1.log &
-echo "--datadir qdata/dd2 $ARGS --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c2/tm.ipc xargs nohup geth 2>>qdata/logs/2.log &
-echo "--datadir qdata/dd3 $ARGS --rpcport 22002 --port 21002 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c3/tm.ipc xargs nohup geth 2>>qdata/logs/3.log &
-echo "--datadir qdata/dd4 $ARGS --rpcport 22003 --port 21003 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c4/tm.ipc xargs nohup geth 2>>qdata/logs/4.log &
-echo "--datadir qdata/dd5 $ARGS --rpcport 22004 --port 21004 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c5/tm.ipc xargs nohup geth 2>>qdata/logs/5.log &
-echo "--datadir qdata/dd6 $ARGS --rpcport 22005 --port 21005 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c6/tm.ipc xargs nohup geth 2>>qdata/logs/6.log &
-echo "--datadir qdata/dd7 $ARGS --rpcport 22006 --port 21006 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c7/tm.ipc xargs nohup geth 2>>qdata/logs/7.log &
+ARGS="--nodiscover --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
+#ARGS="--nodiscover --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --miner.gasprice 888"
+
+basePort=21000
+baseRpcPort=22000
+for i in `seq 1 ${numNodes}`
+do
+    port=$(($basePort + ${i} - 1))
+    rpcPort=$(($baseRpcPort + ${i} - 1))
+    permissioned=
+    if ! [[ -z "${STARTPERMISSION+x}" ]] ; then
+        permissioned="--permissioned"
+    fi
+
+    if [[ $i -eq 1 ]]; then
+        #PRIVATE_CONFIG=qdata/c${i}/tm.ipc nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --rpcport ${rpcPort} --port ${port} --miner.etherbase "0xa9e871f88cbeb870d32d88e4221dcfbd36dd635a" 2>>qdata/logs/${i}.log &
+        PRIVATE_CONFIG=qdata/c${i}/tm.ipc nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
+    else
+        PRIVATE_CONFIG=qdata/c${i}/tm.ipc nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
+    fi
+done
+
 set +v
 
 echo

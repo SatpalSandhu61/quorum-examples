@@ -105,14 +105,26 @@ fi
 echo "[*] Starting $numNodes Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
 QUORUM_GETH_ARGS=${QUORUM_GETH_ARGS:-}
 set -v
-ARGS="--nodiscover --verbosity 5 --networkid $NETWORK_ID --raft --rpc --rpccorsdomain \"*\" --rpcvhosts \"*\" --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft --emitcheckpoints $QUORUM_GETH_ARGS"
-echo "--datadir qdata/dd1 $ARGS --permissioned --raftport 50401 --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c1/tm.ipc xargs nohup geth 2>>qdata/logs/1.log &
-echo "--datadir qdata/dd2 $ARGS --permissioned --raftport 50402 --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c2/tm.ipc xargs nohup geth 2>>qdata/logs/2.log &
-echo "--datadir qdata/dd3 $ARGS --permissioned --raftport 50403 --rpcport 22002 --port 21002 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c3/tm.ipc xargs nohup geth 2>>qdata/logs/3.log &
-echo "--datadir qdata/dd4 $ARGS --permissioned --raftport 50404 --rpcport 22003 --port 21003 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c4/tm.ipc xargs nohup geth 2>>qdata/logs/4.log &
-echo "--datadir qdata/dd5 $ARGS --raftport 50405 --rpcport 22004 --port 21004 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c5/tm.ipc xargs nohup geth 2>>qdata/logs/5.log &
-echo "--datadir qdata/dd6 $ARGS --raftport 50406 --rpcport 22005 --port 21005 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c6/tm.ipc xargs nohup geth 2>>qdata/logs/6.log &
-echo "--datadir qdata/dd7 $ARGS --raftport 50407 --rpcport 22006 --port 21006 --unlock 0 --password passwords.txt" | PRIVATE_CONFIG=qdata/c7/tm.ipc xargs nohup geth 2>>qdata/logs/7.log &
+ARGS="--nodiscover --verbosity 3 --networkid $NETWORK_ID --raft --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --mine --miner.gasprice 888"
+
+basePort=21000
+baseRpcPort=22000
+baseRaftPort=50401
+for i in `seq 1 ${numNodes}`
+do
+    port=$(($basePort + ${i} - 1))
+    rpcPort=$(($baseRpcPort + ${i} - 1))
+    raftPort=$(($baseRaftPort + ${i} - 1))
+    permissioned=
+    if [[ $i -le 4 ]]; then
+        permissioned="--permissioned"
+    elif ! [[ -z "${STARTPERMISSION+x}" ]] ; then
+        permissioned="--permissioned"
+    fi
+
+    PRIVATE_CONFIG=qdata/c${i}/tm.ipc nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
+done
+
 set +v
 
 echo

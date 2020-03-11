@@ -95,7 +95,7 @@ do
       MEMORY="-Xms128M -Xmx128M"
     fi
 
-    CMD="java $jvmParams $DEBUG $MEMORY -jar ${tesseraJar} -configfile $DDIR/tessera-config$TESSERA_CONFIG_TYPE$i.json"
+    CMD="java -XX:+HeapDumpOnOutOfMemoryError $jvmParams $DEBUG $MEMORY -jar ${tesseraJar} -configfile $DDIR/tessera-config$TESSERA_CONFIG_TYPE$i.json"
     echo "$CMD >> qdata/logs/tessera$i.log 2>&1 &"
     ${CMD} >> "qdata/logs/tessera$i.log" 2>&1 &
     sleep 1
