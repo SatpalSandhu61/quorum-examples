@@ -14,7 +14,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <generated.sol.dir>${project.build.directory}/generate-sources/sol</generated.sol.dir>
 
-        <web3j-quorum.version>4.0.6</web3j-quorum.version>
+        <web3j-quorum.version>4.5.8</web3j-quorum.version>
         <commons-lang.version>2.6</commons-lang.version>
         <!-- plugins -->
         <web3j-maven-plugin.version>4.2.0</web3j-maven-plugin.version>
@@ -26,6 +26,11 @@
             <artifactId>quorum</artifactId>
             <version>${web3j-quorum.version}</version>
         </dependency>
+    	<dependency>
+      	    <groupId>org.web3j</groupId>
+            <artifactId>core</artifactId>
+            <version>${web3j-maven-plugin.version}</version>
+    	</dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>

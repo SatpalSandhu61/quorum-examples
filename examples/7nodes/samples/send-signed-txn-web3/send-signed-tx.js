@@ -16,7 +16,7 @@ const providerURL = "http://127.0.0.1";
 const providerPort = "2200".concat(argv.node - 1);
 var web3 = new Web3(new Web3.providers.HttpProvider(providerURL + ":" + providerPort));
 
-const keyJSON = fs.readFileSync('keys/key'+argv.node, 'utf8');
+const keyJSON = fs.readFileSync('../../keys/key'+argv.node, 'utf8');
 const keyObj = JSON.parse(keyJSON);
 const password = '';
 const privateKey = keythereum.recover(password, keyObj);
@@ -46,7 +46,6 @@ web3.eth.getAccounts().then(re => {
   const tx = new EthereumTx(txParams);
 
   tx.sign(privateKey);
-  const serializedTx = tx.serialize();
   var rawTx = '0x' + tx.serialize().toString('hex');
 
   console.log('raw transaction: ', rawTx);
