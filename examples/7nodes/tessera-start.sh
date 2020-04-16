@@ -111,6 +111,7 @@ do
     fi
 
     CMD="java -XX:+HeapDumpOnOutOfMemoryError $jvmParams $DEBUG $MEMORY -jar ${tesseraJar} -configfile $DDIR/tessera-config$TESSERA_CONFIG_TYPE$i.json"
+    #CMD="java -Dlogback.configurationFile=/Users/satpal/Documents/quorum-runtime/quorum-examples/examples/7nodes/logback.xml -XX:+HeapDumpOnOutOfMemoryError $jvmParams $DEBUG $MEMORY -jar ${tesseraJar} -configfile $DDIR/tessera-config$TESSERA_CONFIG_TYPE$i.json"
     echo "$CMD >> qdata/logs/tessera$i.log 2>&1 &"
     ${CMD} >> "qdata/logs/tessera$i.log" 2>&1 &
     sleep 1

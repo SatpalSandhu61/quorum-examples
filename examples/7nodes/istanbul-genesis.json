@@ -38,7 +38,7 @@
       "isQuorum": true,
       "maxCodeSize" : 35,
       "maxCodeSizeChangeBlock" : 0,
-      "enableGasPrice": true,
+      "enableGasPrice": false,
       "istanbul": {
         "epoch": 30000,
         "policy": 0,
