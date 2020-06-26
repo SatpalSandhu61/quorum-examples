@@ -117,8 +117,16 @@ fi
 echo "[*] Starting $numNodes Ethereum nodes with ChainID and NetworkId of $NETWORK_ID"
 QUORUM_GETH_ARGS=${QUORUM_GETH_ARGS:-}
 set -v
-ARGS="--nodiscover --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
-#ARGS="--nodiscover --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --mine --miner.gasprice 888"
+
+#check geth version and if it is below 1.9 then dont include allowSecureUnlock
+allowSecureUnlock=
+chk=`geth help | grep "allow-insecure-unlock" | wc -l`
+if (( $chk == 1 )); then
+    allowSecureUnlock="--allow-insecure-unlock"
+fi
+
+ARGS="--nodiscover --nousb --emitcheckpoints ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
+#ARGS="--nodiscover --nousb --emitcheckpoints ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --mine --miner.gasprice 888"
 
 basePort=21000
 baseRpcPort=22000
