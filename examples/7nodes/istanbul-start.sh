@@ -126,7 +126,7 @@ if (( $chk == 1 )); then
 fi
 
 ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --istanbul.blockperiod ${blockPeriod}  --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul,quorumPermission --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
-#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --istanbul.blockperiod ${blockPeriod}  --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul,quorumPermission --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --miner.gasprice 888"
+#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --istanbul.blockperiod ${blockPeriod}  --networkid $NETWORK_ID --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul,quorumPermission --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --miner.gasprice 888"
 
 basePort=21000
 baseRpcPort=22000

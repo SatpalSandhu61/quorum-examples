@@ -38,10 +38,11 @@
     "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "eip158Block": 0,
     "isQuorum": true,
-    "maxCodeSizeConfig": [
+    "enableGasPrice": false,
+    "maxCodeSizeConfig" : [
       {
-        "block": 0,
-        "size": 35
+        "block" : 0,
+        "size" : 32
       }
     ],
     "clique": {

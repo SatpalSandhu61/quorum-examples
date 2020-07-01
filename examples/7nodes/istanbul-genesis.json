@@ -38,10 +38,11 @@
       "eip155Block": 0,
       "eip158Block": 0,
       "isQuorum": true,
-    "maxCodeSizeConfig": [
+    "enableGasPrice": false,
+    "maxCodeSizeConfig" : [
       {
-        "block": 0,
-        "size": 35
+        "block" : 0,
+        "size" : 32
       }
     ],
       "istanbul": {
