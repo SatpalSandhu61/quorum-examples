@@ -1,5 +1,5 @@
 //Set up contract using ABI and specified contract address
-contractAddress = "0x9d13c6d3afe1721beef56b55d303b09e021e27ab"
+contractAddress = "0x8a5e2a6343108babed07899510fb42297938d41f"
 
 a = eth.accounts[0]
 web3.eth.defaultAccount = a;
