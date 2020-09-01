@@ -1,0 +1,10 @@
+{
+  "baseDir": "/Users/satpal/Documents/work-in-progress/quorum-plugin-hashicorp-vault-account-manager/build/local/",
+  "providers": {
+    "account": {
+      "name":"quorum-account-plugin-hashicorp-vault",
+      "version":"1.0.0",
+      "config": "file://./hashicorp-vault-account-manager.json"
+    }
+  }
+}
