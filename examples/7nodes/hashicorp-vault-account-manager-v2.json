@@ -1,0 +1,8 @@
+{
+    "vault": "http://localhost:8200",
+    "quorumSignerEngineName": "quorum-signer",
+    "accountDirectory": "file:///Users/satpal/Documents/work-in-progress/signer-accts",
+    "authentication": {
+        "token": "env://HASHICORP_TOKEN"
+    }
+}
