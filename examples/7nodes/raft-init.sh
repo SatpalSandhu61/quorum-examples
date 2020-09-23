@@ -70,6 +70,15 @@ do
     cp keys/key${i} qdata/dd${i}/keystore
     cp raft/nodekey${i} qdata/dd${i}/geth/nodekey
     geth --datadir qdata/dd${i} init genesis.json
+
+    #Satpal: adding config file for txMgr IPC connection
+    cat <<EOF > qdata/dd${i}/tx-IPC-config.toml
+       	socket = "tm.ipc"
+        workdir = "qdata/c${i}"
+        dialTimeout = 10
+        requestTimeout = 20
+        responseHeaderTimeout = 30
+EOF
 done
 
 #Initialise Tessera configuration

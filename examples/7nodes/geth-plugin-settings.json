@@ -1,5 +1,5 @@
 {
-  "baseDir": "/Users/satpal/Documents/work-in-progress/quorum-plugin-hashicorp-vault-account-manager/build/local/",
+  "baseDir": "/Users/satpal/Documents/work-in-progress/quorum-account-plugin-hashicorp-vault/build/local/",
   "providers": {
     "account": {
       "name":"quorum-account-plugin-hashicorp-vault",

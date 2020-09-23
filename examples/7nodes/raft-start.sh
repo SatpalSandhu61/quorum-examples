@@ -125,8 +125,13 @@ if (( $chk == 1 )); then
     allowSecureUnlock="--allow-insecure-unlock"
 fi
 
-ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
-#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --mine --miner.gasprice 888"
+ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
+#Using clef:
+#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --password passwords.txt $QUORUM_GETH_ARGS --signer /Users/satpal/Library/Signer/clef.ipc"
+#Using vault:
+#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --password passwords.txt $QUORUM_GETH_ARGS --plugins file://./geth-plugin-settings-v2.json --plugins.skipverify"
+#With gas price enabled:
+#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --mine --miner.gasprice 888"
 
 basePort=21000
 baseRpcPort=22000
@@ -144,6 +149,8 @@ do
     fi
 
     PRIVATE_CONFIG=qdata/c${i}/tm.ipc nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
+    #PRIVATE_CONFIG=qdata/dd${i}/tx-IPC-config.toml nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
+    #PRIVATE_CONFIG=xxx nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
 done
 
 set +v

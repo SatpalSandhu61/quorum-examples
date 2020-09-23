@@ -1,0 +1,10 @@
+{
+    "vault": "http://localhost:8200",
+    "kvEngineName": "secret",
+    "accountDirectory": "file:///Users/satpal/Documents/work-in-progress/accounts",
+    "authentication": {
+        "roleId": "env://HASHICORP_ROLE_ID",
+        "secretId": "env://HASHICORP_SECRET_ID",
+        "approlePath": "approle"
+    }
+}
