@@ -65,6 +65,19 @@ elif [  ! -f "${tesseraJar}" ]; then
   usage
 fi
 
+#extract the tessera version from the jar
+TESSERA_VERSION=$(unzip -p $tesseraJar META-INF/MANIFEST.MF | grep Tessera-Version | cut -d" " -f2)
+echo "Tessera version (extracted from manifest file): $TESSERA_VERSION"
+
+TESSERA_CONFIG_TYPE="-09-"
+
+#if the Tessera version is 0.10, use this config version
+if [ "$TESSERA_VERSION" \> "0.10" ] || [ "$TESSERA_VERSION" == "0.10" ]; then
+    TESSERA_CONFIG_TYPE="-09-"
+fi
+
+echo Config type $TESSERA_CONFIG_TYPE
+
 currentDir=`pwd`
 for i in $nodesToStart
 do
@@ -84,7 +97,7 @@ do
       MEMORY="-Xms128M -Xmx128M"
     fi
 
-    CMD="java $jvmParams $DEBUG $MEMORY -jar ${tesseraJar} -configfile $DDIR/tessera-config$i.json"
+    CMD="java -XX:+HeapDumpOnOutOfMemoryError $jvmParams $DEBUG $MEMORY -jar ${tesseraJar} -configfile $DDIR/tessera-config$TESSERA_CONFIG_TYPE$i.json"
     echo "$CMD >> qdata/logs/tessera$i.log 2>&1 &"
     ${CMD} >> "qdata/logs/tessera$i.log" 2>&1 &
     sleep 1

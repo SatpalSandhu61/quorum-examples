@@ -39,6 +39,7 @@
     "eip158Block": 0,
     "isQuorum": true,
     "enableGasPrice": false,
+    "privacyEnhancementsBlock": 0,
     "maxCodeSizeConfig" : [
       {
         "block" : 0,

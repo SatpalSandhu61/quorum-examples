@@ -1,3 +1,5 @@
+//Generate the bytecode for an abi function call
+
 var web3 = require('web3');
 
 web3= new web3();

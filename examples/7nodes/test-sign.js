@@ -1,3 +1,5 @@
+//Generate the signed transaction data for some data
+
 const ethTx = require('ethereumjs-tx');
 
 var data = 'vSytDW2H/qyQEB4BBn1zbfH4eKE0eirMAs2V4RNg2KCeDh7ijrKP+LhTJ9eXCk2/ncsNGw7UQH5Jdhz49QHytA=='

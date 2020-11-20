@@ -1,3 +1,5 @@
+//Generate the signed transaction data for an abi function call
+
 const ethTx = require('ethereumjs-tx');
 var web3 = require('web3');
 const stripHexPrefix = require('strip-hex-prefix');
