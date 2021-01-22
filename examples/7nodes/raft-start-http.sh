@@ -17,7 +17,7 @@ function usage() {
   echo "determine how many nodes to start up. If the file doesn't exist"
   echo "then 7 nodes will be assumed"
   echo ""
-  ./tessera-start.sh --help
+  ./tessera-start-http.sh --help
   exit -1
 }
 
@@ -102,7 +102,7 @@ fi
 
 if [ "$privacyImpl" == "tessera" ]; then
   echo "[*] Starting Tessera nodes"
-  ./tessera-start.sh ${tesseraOptions}
+  ./tessera-start-http.sh ${tesseraOptions}
 elif [ "$privacyImpl" == "constellation" ]; then
   echo "[*] Starting Constellation nodes"
   ./constellation-start.sh
@@ -125,7 +125,8 @@ if (( $chk == 1 )); then
     allowSecureUnlock="--allow-insecure-unlock"
 fi
 
-ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
+ARGS="--emitcheckpoints --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
+### ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
 #Using clef:
 #ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --verbosity ${verbosity} --networkid $NETWORK_ID --raft --raftblocktime ${blockTime} --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft,quorumPermission,quorumExtension --emitcheckpoints --password passwords.txt $QUORUM_GETH_ARGS --signer /Users/satpal/Library/Signer/clef.ipc"
 #Using vault:
@@ -149,7 +150,8 @@ do
     fi
 
     #PRIVATE_CONFIG=qdata/c${i}/tm.ipc nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
-    PRIVATE_CONFIG=qdata/dd${i}/tx-IPC-config.toml nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
+    #PRIVATE_CONFIG=qdata/dd${i}/tx-IPC-config.toml nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
+    PRIVATE_CONFIG=qdata/dd${i}/tx-HTTP-config.toml nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
     #PRIVATE_CONFIG=xxx nohup geth --datadir qdata/dd${i} ${ARGS} ${permissioned} --raftport ${raftPort} --rpcport ${rpcPort} --port ${port} 2>>qdata/logs/${i}.log &
 done
 

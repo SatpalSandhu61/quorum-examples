@@ -92,7 +92,7 @@ EOF
 done
 
 #Initialise Tessera configuration
-./tessera-init.sh
+./tessera-init-http.sh
 
 #Initialise Cakeshop configuration
 ./cakeshop-init.sh

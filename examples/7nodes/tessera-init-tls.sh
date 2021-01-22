@@ -137,8 +137,22 @@ cat <<EOF > ${DDIR}/tessera-config-09-${i}.json
         {
             "app":"Q2T",
             "enabled": true,
-            "serverAddress":"unix:${DDIR}/tm.ipc",
-            "communicationType" : "REST"
+            "serverAddress":"https://127.0.0.1:910${i}",
+            "communicationType" : "REST",
+            "sslConfig": {
+                "tls": "STRICT",
+                "generateKeyStoreIfNotExisted" : false,
+                "serverTrustMode" : "CA",
+                "serverKeyStore" : "./mycerts/server-localhost-with-san.jks",
+                "serverKeyStorePassword" : "testtest",
+                "serverTrustStore": "./mycerts/truststore.jks",
+                "serverTrustStorePassword": "testtest",
+                "clientTrustMode" : "CA",
+                "clientKeyStore" : "./mycerts/client.jks",
+                "clientKeyStorePassword" : "testtest",
+                "clientTrustStore": "./mycerts/truststore.jks",
+                "clientTrustStorePassword": "testtest"
+            }
         },
         {
             "app":"P2P",

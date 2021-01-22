@@ -137,8 +137,11 @@ cat <<EOF > ${DDIR}/tessera-config-09-${i}.json
         {
             "app":"Q2T",
             "enabled": true,
-            "serverAddress":"unix:${DDIR}/tm.ipc",
-            "communicationType" : "REST"
+            "serverAddress":"http://127.0.0.1:910${i}",
+            "communicationType" : "REST",
+            "sslConfig": {
+              "tls": "OFF"
+            }
         },
         {
             "app":"P2P",
