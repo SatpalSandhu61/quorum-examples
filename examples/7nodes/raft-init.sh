@@ -68,6 +68,7 @@ do
 
     cp ${permNodesFile} qdata/dd${i}/static-nodes.json
     cp keys/key${i} qdata/dd${i}/keystore
+    cp keys/privateKeyFile.key qdata/dd${i}/keystore
     cp raft/nodekey${i} qdata/dd${i}/geth/nodekey
     geth --datadir qdata/dd${i} init genesis.json
 
