@@ -37,13 +37,14 @@
     "eip155Block": 0,
     "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "eip158Block": 0,
+    "qip714Block": 20,
     "isQuorum": true,
     "enableGasPrice": false,
     "privacyEnhancementsBlock": 0,
     "maxCodeSizeConfig" : [
       {
         "block" : 0,
-        "size" : 35
+        "size" : 64
       }
     ]
   },

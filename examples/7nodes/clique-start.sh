@@ -112,16 +112,7 @@ echo "[*] Starting $numNodes Ethereum nodes with ChainID and NetworkId of $NETWO
 QUORUM_GETH_ARGS=${QUORUM_GETH_ARGS:-}
 set -v
 
-#check geth version and if it is below 1.9 then dont include allowSecureUnlock
-allowSecureUnlock=
-chk=`geth help | grep "allow-insecure-unlock" | wc -l`
-if (( $chk == 1 )); then
-    allowSecureUnlock="--allow-insecure-unlock"
-fi
-
-ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --networkid $NETWORK_ID --verbosity ${verbosity} --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,quorumPermission,quorumExtension --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
-#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --networkid $NETWORK_ID --verbosity ${verbosity} --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,quorumPermission,quorumExtension --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --plugins file://./geth-plugin-settings-v2.json --plugins.skipverify"
-#ARGS="--emitcheckpoints --nodiscover --nousb ${allowSecureUnlock} --networkid $NETWORK_ID --verbosity ${verbosity} --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,quorumPermission,quorumExtension --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS --miner.gasprice 888"
+ARGS="--emitcheckpoints --nodiscover --nousb --allow-insecure-unlock --networkid $NETWORK_ID --verbosity ${verbosity} --syncmode full --mine --minerthreads 1 --rpc --rpccorsdomain=* --rpcvhosts=* --rpcaddr 0.0.0.0 --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,quorumPermission,quorumExtension,clique --unlock 0 --password passwords.txt $QUORUM_GETH_ARGS"
 
 basePort=21000
 baseRpcPort=22000
