@@ -41,6 +41,8 @@
     "isQuorum": true,
     "enableGasPrice": false,
     "privacyEnhancementsBlock": 0,
+    "quorumPrecompilesV1Block": 0,
+    "isMPS": false,
     "maxCodeSizeConfig" : [
       {
         "block" : 0,

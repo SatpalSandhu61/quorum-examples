@@ -40,6 +40,8 @@
     "qip714Block": 100,
     "isQuorum": true,
     "enableGasPrice": false,
+    "privacyEnhancementsBlock": 0,
+    "quorumPrecompilesV1Block": 0,
     "maxCodeSizeConfig" : [
       {
         "block" : 0,
@@ -47,7 +49,7 @@
       }
     ],
     "clique": {
-      "period": 2,
+      "period": 5,
       "epoch": 30000
     }
   },
